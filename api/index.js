@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 8000;
 
@@ -35,6 +36,12 @@ let minerales = [
     favorito: false,
   },
 ];
+
+let corsOptions = {
+  origin: ["http://127.0.0.1:8080", "http://localhost:8080"],
+};
+
+app.use(cors(corsOptions));
 
 // Rutas
 app.get("/minerales", (req, res) => {
