@@ -1,6 +1,7 @@
 import { DETALLES_MINERAL, LISTA_MINERALES } from "./data-keys.js";
 
 export class DataProvider {
+  app;
   data = {
     [LISTA_MINERALES]: [],
     [DETALLES_MINERAL]: undefined,
@@ -8,7 +9,8 @@ export class DataProvider {
 
   router;
 
-  constructor(router) {
+  constructor(app, router) {
+    this.app = app;
     this.router = router;
   }
 
@@ -44,5 +46,25 @@ export class DataProvider {
       default:
         return undefined;
     }
+  }
+
+  async toggleFavoritoMineral(slug) {
+    const responseToggleFav = await fetch(
+      `http://localhost:8000/minerales/${slug}/toggle-favorito`,
+      {
+        method: "POST",
+        mode: "cors",
+      }
+    );
+
+    const mineralActualizado = responseToggleFav.json();
+
+    const minerales = this.data[LISTA_MINERALES].map((mineral) =>
+      mineral.slug === slug ? mineralActualizado : mineral
+    );
+
+    this.data[LISTA_MINERALES] = minerales;
+
+    this.app.registerDataChange(LISTA_MINERALES);
   }
 }

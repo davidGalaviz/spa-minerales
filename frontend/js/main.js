@@ -16,8 +16,8 @@ class App {
     this.rutas.set(/\//, ListadoMinerales);
     this.rutas.set(/[a-zA-Z0-9]+/, DetallesMineral);
     this.router = new Router(this, this.rutas);
-    this.dataProvider = new DataProvider(this.router);
-    this.renderer = new Renderer(this.dataProvider, this.router);
+    this.dataProvider = new DataProvider(this, this.router);
+    this.renderer = new Renderer(this, this.dataProvider, this.router);
 
     this.router.renderizarRutaInicial().then(() => {});
   }
@@ -25,6 +25,14 @@ class App {
   async setActiveComponent(newActiveComponent) {
     this.activeComponent = newActiveComponent;
     await this.renderer.renderComponent(this.activeComponent);
+  }
+
+  /**
+   * Re-renderiza el componente activo si éste depende de los datos que cambiaron.
+   * @param {*} dataKey
+   */
+  async registerDataChange(dataKey) {
+    this.renderer.updateActiveComponentIfDependsOnData(dataKey);
   }
 }
 
