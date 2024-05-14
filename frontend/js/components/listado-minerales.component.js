@@ -1,16 +1,12 @@
-export const ListadoMinerales = async (router) => {
-  // Pedimos la lista de minerales del API
-  const response = await fetch("http://localhost:8000/minerales", {
-    mode: "cors",
-  });
+import { LISTA_MINERALES } from "../data-keys.js";
 
-  const minerales = await response.json();
+export const ListadoMinerales = {
+  feedTemplate: (minerales) => {
+    // Llenamos un template por cada mineral que recibimos
+    const items = [];
 
-  // Llenamos un template por cada mineral que recibimos
-  const items = [];
-
-  for (const mineral of minerales) {
-    const item = `
+    for (const mineral of minerales) {
+      const item = `
     <div class="border border-zinc-800 border-solid">
         <img src="${mineral.url_foto}" />
 
@@ -32,26 +28,29 @@ export const ListadoMinerales = async (router) => {
         }">Ver detalles</button>
     </div>
     `;
-    items.push(item);
-  }
+      items.push(item);
+    }
 
-  // Colocamos los elementos dentro de un contenedor
-  const contenedor = '<div class="grid grid-cols-3 gap-4">|</div>';
+    // Colocamos los elementos dentro de un contenedor
+    const contenedor = '<div class="grid grid-cols-3 gap-4">|</div>';
 
-  const openingTagContenedor = contenedor.split("|")[0];
-  const closingTagContenedor = contenedor.split("|")[1];
+    const openingTagContenedor = contenedor.split("|")[0];
+    const closingTagContenedor = contenedor.split("|")[1];
 
-  let templateCompleto = openingTagContenedor;
+    let templateCompleto = openingTagContenedor;
 
-  for (const item of items) {
-    templateCompleto = templateCompleto.concat(item);
-  }
+    for (const item of items) {
+      templateCompleto = templateCompleto.concat(item);
+    }
 
-  templateCompleto = templateCompleto.concat(closingTagContenedor);
+    templateCompleto = templateCompleto.concat(closingTagContenedor);
 
-  function addEventListeners(router) {
-    const items = document.querySelectorAll(".btn-ver-detalles");
-    items.forEach((item) => {
+    return templateCompleto;
+  },
+  requiresData: LISTA_MINERALES,
+  registerEventListeners: (dataProvider, router) => {
+    const btnVerDetalles = document.querySelectorAll(".btn-ver-detalles");
+    btnVerDetalles.forEach((item) => {
       item.addEventListener("click", (event) => {
         const slug = item.getAttribute("data-slug");
         router.navegar(event, slug, { slug });
@@ -62,17 +61,8 @@ export const ListadoMinerales = async (router) => {
     btnToggleFav.forEach((item) => {
       item.addEventListener("click", async (event) => {
         const slug = item.getAttribute("data-slug");
-        const responseToggleFav = await fetch(
-          `http://localhost:8000/minerales/${slug}/toggle-favorito`,
-          {
-            method: "POST",
-            mode: "cors",
-          }
-        );
+        dataProvider.toggleFavoritoMineral(slug);
       });
     });
-  }
-
-  // Devolvemos el template completado
-  return [templateCompleto, addEventListeners];
+  },
 };

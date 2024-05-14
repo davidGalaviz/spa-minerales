@@ -1,12 +1,31 @@
 import { Router } from "./router.js";
-import { ListadoMinerales } from "./routes/listado-minerales.js";
+import { DetallesMineral } from "./components/detalles-mineral.component.js";
+import { ListadoMinerales } from "./components/listado-minerales.component.js";
+import { Renderer } from "./renderer.js";
+import { DataProvider } from "./data-provider.js";
 
-const rutas = new Map();
-rutas.set(/\//, ListadoMinerales);
+class App {
+  activeComponent = undefined;
+  router;
+  dataProvider;
+  renderer;
 
-// [/\//, ListadoMinerales], [/\/[a-zA-Z0-9]+/, null]
+  rutas = new Map();
 
-// mostrar el contenido apropiado para la URL actual
-const router = new Router(rutas);
+  constructor() {
+    this.rutas.set(/\//, ListadoMinerales);
+    this.rutas.set(/[a-zA-Z0-9]+/, DetallesMineral);
+    this.router = new Router(this, this.rutas);
+    this.dataProvider = new DataProvider(this.router);
+    this.renderer = new Renderer(this.dataProvider, this.router);
 
-// Escuchar por cambios en la URL y mostrar el contenido apropiado [FUNCIONALIDAD DE ROUTER]
+    this.router.renderizarRutaInicial().then(() => {});
+  }
+
+  async setActiveComponent(newActiveComponent) {
+    this.activeComponent = newActiveComponent;
+    await this.renderer.renderComponent(this.activeComponent);
+  }
+}
+
+const app = new App();

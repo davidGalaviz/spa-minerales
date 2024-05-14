@@ -1,32 +1,57 @@
+"use-strict";
 export class Router {
   rutas;
-  mainContainer = document.querySelector(".main-container");
+  app;
+  rutaActiva;
 
-  constructor(rutas) {
+  constructor(app, rutas) {
+    this.app = app;
     this.rutas = rutas;
 
-    this.renderizarRutaInicial();
+    const rutaInicial = window.location.pathname;
+    this.rutaActiva = rutaInicial;
+
+    addEventListener("popstate", async (event) => {
+      this.rutaActiva = event.state;
+      const componenteQueCoincide = this.buscarComponente(event.state ?? "/");
+
+      await this.app.setActiveComponent(componenteQueCoincide);
+    });
   }
 
   async renderizarRutaInicial() {
     const rutaInicial = window.location.pathname;
 
-    await this.renderizarRuta(rutaInicial);
+    const componenteQueCoincide = this.buscarComponente(rutaInicial);
+
+    await this.app.setActiveComponent(componenteQueCoincide);
   }
 
-  async renderizarRuta(ruta) {
-    let htmlCorrespondiente;
-
+  /**
+   * Busca el componente que coincida para la ruta dada.
+   * @param {*} ruta
+   */
+  buscarComponente(ruta) {
+    let componente;
     // Necesitamos encontrar la ruta que coincida
-    for (const [key, value] of this.rutas) {
+    for (const [key, comp] of this.rutas) {
       if (key.test(ruta)) {
-        htmlCorrespondiente = value;
+        componente = comp;
         break;
       }
     }
 
-    const content = await htmlCorrespondiente();
+    return componente;
+  }
 
-    this.mainContainer.innerHTML = content;
+  async navegar(event, ruta, state) {
+    // No quitamos la página actual
+    event.preventDefault();
+    // Push state
+    history.pushState(state, "", ruta);
+    this.rutaActiva = ruta;
+    const componenteQueCoincide = this.buscarComponente(ruta);
+
+    await this.app.setActiveComponent(componenteQueCoincide);
   }
 }
