@@ -47,9 +47,11 @@ export class Router {
   async navegar(event, ruta, state) {
     // No quitamos la página actual
     event.preventDefault();
-    // Push state
+    // Push state - Cambiamos la URL actual
     history.pushState(state, "", ruta);
     this.rutaActiva = ruta;
+
+    // Buscamos el componente que hay que mostrar en esta ruta
     const componenteQueCoincide = this.buscarComponente(ruta);
 
     await this.app.setActiveComponent(componenteQueCoincide);
