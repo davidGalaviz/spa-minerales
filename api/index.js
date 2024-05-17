@@ -22,7 +22,7 @@ let minerales = [
       "https://i0.wp.com/geologyscience.com/wp-content/uploads/2023/05/Aquamarine-4.jpeg?resize=640%2C422&ssl=1",
     formula: "Be₃Al₂(Si₁₆O₁₈)",
     descripcion:
-      "La aguamarina es una hermosa piedra preciosa y una variedad del mineral berilo. Es muy apreciado por su impresionante color azul a azul verdoso, que recuerda a las aguas cristalinas del mar, lo que le da el nombre de “aguamarina”.",
+      "La aguamarina es una hermosa piedra preciosa y una variedad del mineral berilo. Es muy apreciado por su impresionante color azul a azul verdoso, que recuerda a las aguas cristalinas del mar, lo que le da el nombre de 'aguamarina'.",
     favorito: false,
   },
   {

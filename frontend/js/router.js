@@ -13,13 +13,17 @@ export class Router {
 
     addEventListener("popstate", async (event) => {
       this.rutaActiva = event.state;
+      // Buscamos el componente que hay que mostrar en la ruta actual
       const componenteQueCoincide = this.buscarComponente(event.state ?? "/");
 
       await this.app.setActiveComponent(componenteQueCoincide);
     });
   }
 
-  async renderizarRutaInicial() {
+  /**
+   * Determina qué componente se debe mostrar inicialmente. (En la ruta inicial).
+   */
+  async setComponenteInicial() {
     const rutaInicial = window.location.pathname;
 
     const componenteQueCoincide = this.buscarComponente(rutaInicial);
@@ -44,16 +48,24 @@ export class Router {
     return componente;
   }
 
+  /**
+   * Realiza una navegación hacia la ruta especificada.
+   * @param {*} event
+   * @param {*} ruta
+   * @param {*} state
+   */
   async navegar(event, ruta, state) {
     // No quitamos la página actual
     event.preventDefault();
     // Push state - Cambiamos la URL actual
     history.pushState(state, "", ruta);
+    // Llevamos registro de la ruta activa
     this.rutaActiva = ruta;
 
     // Buscamos el componente que hay que mostrar en esta ruta
     const componenteQueCoincide = this.buscarComponente(ruta);
 
+    // Establecemos ese como el componente activo
     await this.app.setActiveComponent(componenteQueCoincide);
   }
 }

@@ -13,17 +13,27 @@ class App {
   rutas = new Map();
 
   constructor() {
+    // Definimos qué componente correponde a qué ruta
     this.rutas.set(/\//, ListadoMinerales);
     this.rutas.set(/[a-zA-Z0-9]+/, DetallesMineral);
+
+    // Inicializamos el Router, DataProvider y el Renderer
     this.router = new Router(this, this.rutas);
     this.dataProvider = new DataProvider(this, this.router);
     this.renderer = new Renderer(this, this.dataProvider, this.router);
 
-    this.router.renderizarRutaInicial().then(() => {});
+    // Renderizamos la ruta inicial
+    this.router.setComponenteInicial().then(() => {});
   }
 
+  /**
+   * Establece un componente como el componente activo (es decir, el que debe mostrarse actualmente).
+   * @param {*} newActiveComponent
+   */
   async setActiveComponent(newActiveComponent) {
+    // Llevamos registro de cuál es el componente activo
     this.activeComponent = newActiveComponent;
+    // Renderizamos el componente
     await this.renderer.renderComponent(this.activeComponent);
   }
 

@@ -3,12 +3,15 @@ import { DETALLES_MINERAL } from "../data-keys.js";
 export const DetallesMineral = {
   feedTemplate: (mineral) => {
     const template = `
-    <div>
+    <div class="columns-2">
         <img src="${mineral.url_foto}" />
-        <span class="font-bold text-xl">${mineral.nombre}</span>
-        <span class="text-slate-400">${mineral.formula}</span>
+        <div class="flex flex-col">
+          <span class="font-bold text-3xl">${mineral.nombre}</span>
+          <span class="text-slate-400">${mineral.formula}</span>
 
-        <span>${mineral.descripcion}</span>
+          <span class="mt-4">${mineral.descripcion}</span>
+        </div>
+        
     </div>
     `;
 

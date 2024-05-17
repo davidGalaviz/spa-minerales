@@ -20,19 +20,23 @@ export const ListadoMinerales = {
                 ? `<img data-slug="${mineral.slug}" class="btn-toggle-favorito h-1/2 w-1/2 cursor-pointer" src="https://img.icons8.com/ios/50/star--v1.png" alt="star--v1"/>`
                 : `<img data-slug="${mineral.slug}" class="btn-toggle-favorito h-1/2 w-1/2 cursor-pointer" src="https://img.icons8.com/ios-filled/50/000000/star--v1.png" alt="star--v1"/>`
             }</div>
-           
+          
         </div>
+       
+          <button class="btn-ver-detalles bg-zinc-800 text-slate-50 p-4 w-full mt-3" data-slug="${
+            mineral.slug
+          }">Ver detalles</button>
 
-        <button class="btn-ver-detalles bg-zinc-800 text-slate-50 p-4 w-full hover:bg-gradient-to-l" data-slug="${
-          mineral.slug
-        }">Ver detalles</button>
+      
+
+        
     </div>
     `;
       items.push(item);
     }
 
     // Colocamos los elementos dentro de un contenedor
-    const contenedor = '<div class="grid grid-cols-3 gap-4">|</div>';
+    const contenedor = '<div class="columns-3 gap-4">|</div>';
 
     const openingTagContenedor = contenedor.split("|")[0];
     const closingTagContenedor = contenedor.split("|")[1];
